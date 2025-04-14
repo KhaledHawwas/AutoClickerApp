@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
 
     <application
         android:allowBackup="true"
@@ -42,13 +44,22 @@
 <!--                android:resource="@xml/accessibility_service_config" />-->
 <!--        </service>-->
 
-        <receiver android:name=".auto_scroll.AutoScrollReceiver"
+
+        <service
+            android:name=".auto_scroll.AutoScrollService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.example.autoscroll.START_SCROLL"/>
-                <action android:name="com.example.autoscroll.STOP_SCROLL"/>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
-        </receiver>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+            <meta-data
+                android:name="AccessibilityService_canPerformGestures"
+                android:value="true" />
+        </service>
 
 <!--        <service-->
 <!--            android:name=".notification.NotificationService"-->

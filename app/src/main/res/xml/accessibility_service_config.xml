@@ -4,6 +4,8 @@
     android:packageNames="com.whatsapp,com.instagram.android"
     android:accessibilityEventTypes="typeWindowContentChanged"
     android:accessibilityFeedbackType="feedbackGeneric"
+    android:canPerformGestures="true"
+
     android:notificationTimeout="100"
     android:canRetrieveWindowContent="true"
     android:accessibilityFlags="flagDefault">

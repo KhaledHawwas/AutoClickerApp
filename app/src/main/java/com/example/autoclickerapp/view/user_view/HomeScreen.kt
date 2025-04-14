@@ -1,32 +1,32 @@
 package com.example.autoclickerapp.view.user_view
 
 import android.content.*
-import android.os.Handler
-import android.os.Looper
-import android.provider.Settings
-import android.util.Log
-import androidx.compose.foundation.background
+import android.net.*
+import android.os.*
+import android.provider.*
+import android.util.*
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.*
+import androidx.compose.ui.res.*
+import androidx.hilt.navigation.compose.*
+import androidx.navigation.*
 import com.example.autoclickerapp.R
-import com.example.autoclickerapp.notification.NotificationService
-import com.example.autoclickerapp.viewmodel.AuthViewModel
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.example.autoclickerapp.notification.*
+import com.example.autoclickerapp.viewmodel.*
+import com.google.accompanist.systemuicontroller.*
+
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier, navController: NavHostController, role: Int,
-    authViewModel: AuthViewModel = hiltViewModel()
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+    role: Int,
+    authViewModel: AuthViewModel = hiltViewModel(),
 ) {
     val systemUiController = rememberSystemUiController()
 
@@ -60,13 +60,19 @@ fun HomeScreen(
                     Handler(Looper.getMainLooper()).postDelayed({
                         isServiceEnabled = isAccessibilityServiceEnabled(context)
                     }, 2000)
+                } else if (!isOverlayPermissionGranted(context)) {
+                    val intent = Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:${context.packageName}")
+                    )
+                    context.startActivity(intent)
                 } else {
-                    Log.d("HomeScreen", "🚀 Navigating to home screen...")
+                    // All permissions granted – proceed
                     navigateToHomeScreen(context)
                     Handler(Looper.getMainLooper()).postDelayed({
-                        Log.d("HomeScreen", "🔔 Starting Notification Service...")
                         startNotificationService(context)
-                    }, 1000) // Delay to ensure smooth transition
+                    }, 1000)
+                    OverlayLayout(context).showOverlay()
                 }
             },
             colors = ButtonDefaults.buttonColors(
@@ -74,11 +80,21 @@ fun HomeScreen(
                 contentColor = Color.White
             )
         ) {
-            Text(if (isServiceEnabled) "Go to Home & Start Scrolling" else "Enable Accessibility Service")
+            Text(
+                if (!isServiceEnabled) "Enable Accessibility Service"
+                else if (!isOverlayPermissionGranted(context)) "Enable Overlay Permission"
+                else "Go to Home & Start Scrolling"
+            )
         }
+
     }
 }
 
+
+
+fun isOverlayPermissionGranted(context: Context): Boolean {
+    return Settings.canDrawOverlays(context)
+}
 
 // Function to check if Accessibility Service is enabled
 fun isAccessibilityServiceEnabled(context: Context): Boolean {

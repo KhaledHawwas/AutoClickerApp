@@ -1,4 +1,4 @@
-//package com.example.autoclickerapp.di
+package com.example.autoclickerapp.di
 //
 //import android.content.Context
 //import com.google.firebase.auth.FirebaseAuth

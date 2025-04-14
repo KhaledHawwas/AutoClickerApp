@@ -12,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.autoclickerapp.BuildConfig
 import com.example.autoclickerapp.R
 import com.example.autoclickerapp.navigation.screen.Screen
 import com.example.autoclickerapp.navigation.bottom_navbar.BottomNavigationBar
@@ -109,7 +110,11 @@ fun AppNavigation(
                     modifier = Modifier,
                     navController = navController,
                     onLoginClick = { role ->
+                        if (BuildConfig.DEBUG) {
+                            navController.navigate(Screen.Home.chooseRole(role))
+                        }else{
                         navController.navigate(Screen.Login.chooseRole(role))
+                        }
                     },
                     authViewModel = authViewModel,
                     onNavigateToSignUp = {

@@ -46,6 +46,8 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
+        buildConfig=true
     }
 }
 
@@ -64,6 +66,7 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
     implementation(libs.androidx.uiautomator)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

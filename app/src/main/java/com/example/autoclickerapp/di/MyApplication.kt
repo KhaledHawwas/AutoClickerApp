@@ -1,4 +1,4 @@
-//package com.example.autoclickerapp.di
+package com.example.autoclickerapp.di
 //
 //import android.app.Application
 //import com.google.firebase.FirebaseApp
